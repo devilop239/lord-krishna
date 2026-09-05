@@ -1,0 +1,20 @@
+{
+  "id": "pc-pc-03",
+  "baseId": "pc-03",
+  "file": "pc-03.jpg",
+  "deviceTarget": "pc",
+  "binFile": "pc-pc-03.bin",
+  "particleCount": 139655,
+  "width": 1080,
+  "height": 543,
+  "aspect": 1.988950252532959,
+  "orientation": "landscape",
+  "cellWorldHeight": 0.0037735849618911743,
+  "bounds": {
+    "minX": -0.9925881028175354,
+    "maxX": 0.9925881028175354,
+    "minY": -0.498113214969635,
+    "maxY": 0.498113214969635
+  },
+  "coverageScore": 1
+}

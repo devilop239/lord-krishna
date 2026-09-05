@@ -1,0 +1,73 @@
+:root {
+  /* KRISHNA BLUE - Professional spiritual aesthetic optimized for divine imagery */
+  --void: #0a0f1e;
+  --void-deep: #030508;
+  --bg-gradient-1: rgba(40, 70, 130, 0.25);
+  --bg-gradient-2: rgba(25, 45, 95, 0.18);
+  --text-primary: #eceafc;
+  --accent-violet: #9a86ff;
+  --font-display: 'Fraunces', 'Iowan Old Style', serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  touch-action: none;
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+body {
+  background: var(--void-deep);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 42%, var(--bg-gradient-1), transparent 62%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, var(--bg-gradient-2), transparent 55%),
+    var(--void-deep);
+}
+
+#scene-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Soft ambient vignette for true full-screen visual clarity */
+  box-shadow: inset 0 0 100px 30px rgba(3, 5, 8, 0.40);
+}
+
+@media (max-width: 768px) {
+  .vignette {
+    box-shadow: inset 0 0 60px 15px rgba(3, 5, 8, 0.35);
+  }
+}
+

@@ -1,0 +1,23 @@
+{
+  "name": "krishna-particle-studio",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "preprocess": "node tools/run_preprocess.js",
+    "dev": "vite",
+    "build": "node tools/run_preprocess.js && tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/pngjs": "^6.0.5",
+    "@types/three": "^0.185.4",
+    "jpeg-js": "^0.4.4",
+    "pngjs": "^7.0.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  }
+}

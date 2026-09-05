@@ -1,0 +1,20 @@
+{
+  "id": "pc-pc-02",
+  "baseId": "pc-02",
+  "file": "pc-02.jpg",
+  "deviceTarget": "pc",
+  "binFile": "pc-pc-02.bin",
+  "particleCount": 139916,
+  "width": 1199,
+  "height": 606,
+  "aspect": 1.9785478115081787,
+  "orientation": "landscape",
+  "cellWorldHeight": 0.003759398590773344,
+  "bounds": {
+    "minX": -0.9873932003974915,
+    "maxX": 0.9873932003974915,
+    "minY": -0.4981203079223633,
+    "maxY": 0.4981203079223633
+  },
+  "coverageScore": 1
+}

@@ -1,0 +1,20 @@
+{
+  "id": "mobile-krishna-02",
+  "baseId": "krishna-02",
+  "file": "krishna-02.jpg",
+  "deviceTarget": "mobile",
+  "binFile": "mobile-krishna-02.bin",
+  "particleCount": 139690,
+  "width": 736,
+  "height": 1104,
+  "aspect": 0.6666666865348816,
+  "orientation": "portrait",
+  "cellWorldHeight": 0.0021834061481058598,
+  "bounds": {
+    "minX": -0.33224043250083923,
+    "maxX": 0.33224043250083923,
+    "minY": -0.49890831112861633,
+    "maxY": 0.49890831112861633
+  },
+  "coverageScore": 1
+}

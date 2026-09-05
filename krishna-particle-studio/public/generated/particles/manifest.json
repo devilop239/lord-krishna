@@ -1,0 +1,222 @@
+[
+  {
+    "id": "mobile-krishna-01",
+    "baseId": "krishna-01",
+    "file": "krishna-01.jpg",
+    "deviceTarget": "mobile",
+    "binFile": "mobile-krishna-01.bin",
+    "particleCount": 140299,
+    "width": 784,
+    "height": 1168,
+    "aspect": 0.6712328791618347,
+    "orientation": "portrait",
+    "cellWorldHeight": 0.002188183832913637,
+    "bounds": {
+      "minX": -0.3345232307910919,
+      "maxX": 0.3345232307910919,
+      "minY": -0.49890589714050293,
+      "maxY": 0.49890589714050293
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "mobile-krishna-02",
+    "baseId": "krishna-02",
+    "file": "krishna-02.jpg",
+    "deviceTarget": "mobile",
+    "binFile": "mobile-krishna-02.bin",
+    "particleCount": 139690,
+    "width": 736,
+    "height": 1104,
+    "aspect": 0.6666666865348816,
+    "orientation": "portrait",
+    "cellWorldHeight": 0.0021834061481058598,
+    "bounds": {
+      "minX": -0.33224043250083923,
+      "maxX": 0.33224043250083923,
+      "minY": -0.49890831112861633,
+      "maxY": 0.49890831112861633
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "mobile-krishna-03",
+    "baseId": "krishna-03",
+    "file": "krishna-03.jpg",
+    "deviceTarget": "mobile",
+    "binFile": "mobile-krishna-03.bin",
+    "particleCount": 140219,
+    "width": 736,
+    "height": 1307,
+    "aspect": 0.5631216764450073,
+    "orientation": "portrait",
+    "cellWorldHeight": 0.0020040080416947603,
+    "bounds": {
+      "minX": -0.28055882453918457,
+      "maxX": 0.28055882453918457,
+      "minY": -0.4989979863166809,
+      "maxY": 0.4989979863166809
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "mobile-krishna-04",
+    "baseId": "krishna-04",
+    "file": "krishna-04.jpg",
+    "deviceTarget": "mobile",
+    "binFile": "mobile-krishna-04.bin",
+    "particleCount": 140219,
+    "width": 736,
+    "height": 1308,
+    "aspect": 0.5626911520957947,
+    "orientation": "portrait",
+    "cellWorldHeight": 0.0020040080416947603,
+    "bounds": {
+      "minX": -0.2803443372249603,
+      "maxX": 0.2803443372249603,
+      "minY": -0.4989979863166809,
+      "maxY": 0.4989979863166809
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "pc-pc-01",
+    "baseId": "pc-01",
+    "file": "pc-01.png",
+    "deviceTarget": "pc",
+    "binFile": "pc-pc-01.bin",
+    "particleCount": 140219,
+    "width": 1672,
+    "height": 941,
+    "aspect": 1.776833176612854,
+    "orientation": "landscape",
+    "cellWorldHeight": 0.0035587188322097063,
+    "bounds": {
+      "minX": -0.8866361975669861,
+      "maxX": 0.8866361975669861,
+      "minY": -0.49822065234184265,
+      "maxY": 0.49822065234184265
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "pc-pc-02",
+    "baseId": "pc-02",
+    "file": "pc-02.jpg",
+    "deviceTarget": "pc",
+    "binFile": "pc-pc-02.bin",
+    "particleCount": 139916,
+    "width": 1199,
+    "height": 606,
+    "aspect": 1.9785478115081787,
+    "orientation": "landscape",
+    "cellWorldHeight": 0.003759398590773344,
+    "bounds": {
+      "minX": -0.9873932003974915,
+      "maxX": 0.9873932003974915,
+      "minY": -0.4981203079223633,
+      "maxY": 0.4981203079223633
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "pc-pc-03",
+    "baseId": "pc-03",
+    "file": "pc-03.jpg",
+    "deviceTarget": "pc",
+    "binFile": "pc-pc-03.bin",
+    "particleCount": 139655,
+    "width": 1080,
+    "height": 543,
+    "aspect": 1.988950252532959,
+    "orientation": "landscape",
+    "cellWorldHeight": 0.0037735849618911743,
+    "bounds": {
+      "minX": -0.9925881028175354,
+      "maxX": 0.9925881028175354,
+      "minY": -0.498113214969635,
+      "maxY": 0.498113214969635
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "pc-pc-04",
+    "baseId": "pc-04",
+    "file": "pc-04.jpg",
+    "deviceTarget": "pc",
+    "binFile": "pc-pc-04.bin",
+    "particleCount": 140500,
+    "width": 736,
+    "height": 414,
+    "aspect": 1.7777777910232544,
+    "orientation": "landscape",
+    "cellWorldHeight": 0.0035587188322097063,
+    "bounds": {
+      "minX": -0.8871111273765564,
+      "maxX": 0.8871111273765564,
+      "minY": -0.49822065234184265,
+      "maxY": 0.49822065234184265
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "pc-pc-05",
+    "baseId": "pc-05",
+    "file": "pc-05.jpg",
+    "deviceTarget": "pc",
+    "binFile": "pc-pc-05.bin",
+    "particleCount": 140500,
+    "width": 720,
+    "height": 405,
+    "aspect": 1.7777777910232544,
+    "orientation": "landscape",
+    "cellWorldHeight": 0.0035587188322097063,
+    "bounds": {
+      "minX": -0.8871111273765564,
+      "maxX": 0.8871111273765564,
+      "minY": -0.49822065234184265,
+      "maxY": 0.49822065234184265
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "pc-pc-06",
+    "baseId": "pc-06",
+    "file": "pc-06.jpg",
+    "deviceTarget": "pc",
+    "binFile": "pc-pc-06.bin",
+    "particleCount": 139657,
+    "width": 1302,
+    "height": 736,
+    "aspect": 1.76902174949646,
+    "orientation": "landscape",
+    "cellWorldHeight": 0.0035587188322097063,
+    "bounds": {
+      "minX": -0.8827311992645264,
+      "maxX": 0.8827311992645264,
+      "minY": -0.49822065234184265,
+      "maxY": 0.49822065234184265
+    },
+    "coverageScore": 1
+  },
+  {
+    "id": "pc-pc-07",
+    "baseId": "pc-07",
+    "file": "pc-07.jpg",
+    "deviceTarget": "pc",
+    "binFile": "pc-pc-07.bin",
+    "particleCount": 140219,
+    "width": 1308,
+    "height": 736,
+    "aspect": 1.7771738767623901,
+    "orientation": "landscape",
+    "cellWorldHeight": 0.0035587188322097063,
+    "bounds": {
+      "minX": -0.8868062496185303,
+      "maxX": 0.8868062496185303,
+      "minY": -0.49822065234184265,
+      "maxY": 0.49822065234184265
+    },
+    "coverageScore": 1
+  }
+]

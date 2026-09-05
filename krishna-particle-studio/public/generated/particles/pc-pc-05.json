@@ -1,0 +1,20 @@
+{
+  "id": "pc-pc-05",
+  "baseId": "pc-05",
+  "file": "pc-05.jpg",
+  "deviceTarget": "pc",
+  "binFile": "pc-pc-05.bin",
+  "particleCount": 140500,
+  "width": 720,
+  "height": 405,
+  "aspect": 1.7777777910232544,
+  "orientation": "landscape",
+  "cellWorldHeight": 0.0035587188322097063,
+  "bounds": {
+    "minX": -0.8871111273765564,
+    "maxX": 0.8871111273765564,
+    "minY": -0.49822065234184265,
+    "maxY": 0.49822065234184265
+  },
+  "coverageScore": 1
+}
