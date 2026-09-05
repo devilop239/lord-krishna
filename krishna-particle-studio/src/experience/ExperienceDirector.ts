@@ -41,6 +41,7 @@ export class ExperienceDirector {
   private busy = false;
   private fpsEma = 60;
   private holdFpsLow = 0;
+  private isPrecaching = false;
   private removeTick: () => void;
   private onKey: (e: KeyboardEvent) => void;
   private cleanupListeners: () => void;
@@ -260,13 +261,15 @@ export class ExperienceDirector {
       // Gentle decay of lingering unhiding bloom wave into crystal-clear hold
       artworkGlow = Math.max(0.0, 1.0 - this.actTime / 1.6) * 0.45;
 
-      // Background pre-cache all remaining datasets during hold stage for 100% instant, unbroken transitions
-      if (this.actTime > 0.5 && this.cache.size < this.images.length) {
-        this.images.forEach((asset) => {
-          if (!this.cache.has(asset.id)) {
-            void this.loadDataset(asset);
-          }
-        });
+      // Background pre-cache remaining datasets sequentially (one by one) to prevent network congestion on Vercel
+      if (this.actTime > 0.5 && !this.isPrecaching && this.cache.size < this.images.length) {
+        const nextAsset = this.images.find((asset) => !this.cache.has(asset.id));
+        if (nextAsset) {
+          this.isPrecaching = true;
+          this.loadDataset(nextAsset).finally(() => {
+            this.isPrecaching = false;
+          });
+        }
       }
 
       if (this.actTime >= recipe.timings.hold) {
