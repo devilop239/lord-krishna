@@ -80,11 +80,14 @@ export class ParticleField {
   // Styles
   private spawnStyle: SpawnStyle = 'cloud';
   private dissolveStyleValue: DissolveStyle = 'float-away';
+  getSpawnStyle(): SpawnStyle { return this.spawnStyle; }
   getDissolveStyle(): DissolveStyle { return this.dissolveStyleValue; }
 
   // Seeds
   private spawnSeed = 9001;
   private targetSeed = 9001;
+  getSpawnSeed(): number { return this.spawnSeed; }
+  getTargetSeed(): number { return this.targetSeed; }
 
   private canvasH = 800;
 
@@ -196,7 +199,7 @@ export class ParticleField {
     const cellWorld = dataset.header.coverageScore > 0 ? dataset.header.coverageScore : (1.0 / Math.sqrt(n));
     (this.material.uniforms.uWorldPixel.value as number) = cellWorld;
 
-    const { target, color, size, importance, luminance, edge, scatter: scatterBuf, delays, seed } = dataset;
+    const { target, color, size, importance, luminance, scatter: scatterBuf, delays, seed } = dataset;
     const scatterScale = isMobile ? 0.35 : 1.0;
 
     for (let i = 0; i < n; i++) {
