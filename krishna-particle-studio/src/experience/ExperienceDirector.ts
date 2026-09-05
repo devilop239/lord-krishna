@@ -42,8 +42,8 @@ export class ExperienceDirector {
   private fpsEma = 60;
   private holdFpsLow = 0;
   private removeTick: () => void;
-  private onClick: () => void;
   private onKey: (e: KeyboardEvent) => void;
+  private cleanupListeners: () => void;
 
   constructor(engine: Engine, field: ParticleField, composer: SceneComposer) {
     this.engine = engine;
@@ -88,28 +88,24 @@ export class ExperienceDirector {
       }
     };
 
-    // Pointer events (Desktop & Mobile)
-    window.addEventListener('pointerdown', (e) => handleStart(e.clientX, e.clientY));
-    window.addEventListener('pointerup', (e) => handleEnd(e.clientX, e.clientY));
+    const onPointerDown = (e: PointerEvent) => handleStart(e.clientX, e.clientY);
+    const onPointerUp = (e: PointerEvent) => handleEnd(e.clientX, e.clientY);
 
-    // Touch events fallback (iOS / Android)
-    window.addEventListener('touchstart', (e) => {
+    const onTouchStart = (e: TouchEvent) => {
       if (e.touches.length > 0) handleStart(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
-
-    window.addEventListener('touchend', (e) => {
+    };
+    const onTouchEnd = (e: TouchEvent) => {
       if (e.changedTouches.length > 0) handleEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-    }, { passive: true });
+    };
 
-    // Wheel / Trackpad scroll down (PC / Mac)
     let wheelTimer: number | null = null;
-    window.addEventListener('wheel', (e) => {
+    const onWheel = (e: WheelEvent) => {
       if (Math.abs(e.deltaY) > 30) {
         if (wheelTimer !== null) return;
         wheelTimer = window.setTimeout(() => { wheelTimer = null; }, 600);
         this.requestNewCreation(true);
       }
-    }, { passive: true });
+    };
 
     this.onKey = (event: KeyboardEvent) => {
       if (event.code === 'Space' && !event.repeat) {
@@ -117,7 +113,22 @@ export class ExperienceDirector {
         this.requestNewCreation(true);
       }
     };
+
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+    window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('keydown', this.onKey);
+
+    this.cleanupListeners = () => {
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('touchstart', onTouchStart);
+      window.removeEventListener('touchend', onTouchEnd);
+      window.removeEventListener('wheel', onWheel);
+      window.removeEventListener('keydown', this.onKey);
+    };
   }
 
   async start(): Promise<void> {
@@ -389,8 +400,7 @@ export class ExperienceDirector {
 
   dispose(): void {
     this.removeTick();
-    this.engine.renderer.domElement.removeEventListener('pointerup', this.onClick);
-    window.removeEventListener('keydown', this.onKey);
+    this.cleanupListeners();
     this.artworkPlane.dispose();
   }
 }
