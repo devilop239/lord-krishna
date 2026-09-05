@@ -58,46 +58,65 @@ export class ExperienceDirector {
     engine.events.on('stats', (stats) => this.adaptQuality(stats.fps));
     engine.events.on('resize', () => this.fitArtwork());
 
-    let pointerStartX = 0;
-    let pointerStartY = 0;
-    let pointerStartTime = 0;
+    let startX = 0;
+    let startY = 0;
+    let startTime = 0;
 
-    const domElement = engine.renderer.domElement;
-
-    domElement.addEventListener('pointerdown', (e: PointerEvent) => {
-      pointerStartX = e.clientX;
-      pointerStartY = e.clientY;
-      pointerStartTime = performance.now();
-    });
-
-    this.onClick = (e?: Event) => {
-      if (e instanceof PointerEvent) {
-        const dx = e.clientX - pointerStartX;
-        const dy = e.clientY - pointerStartY;
-        const dist = Math.hypot(dx, dy);
-        const dt = performance.now() - pointerStartTime;
-
-        // Downward Swipe / Pull-Down Reload Feature:
-        // Dragging down from top-to-bottom (dy > 45px) triggers a brand new creation / reload!
-        const isDownwardSwipe = dy > 45 && Math.abs(dy) > Math.abs(dx) * 1.2;
-        if (isDownwardSwipe) {
-          this.requestNewCreation();
-          return;
-        }
-
-        // Ignore horizontal or upward drags (dist >= 10px or duration > 450ms) to prevent glitches
-        if (dist >= 10 || dt > 450) return;
-      }
-      this.requestNewCreation();
+    const handleStart = (x: number, y: number) => {
+      startX = x;
+      startY = y;
+      startTime = performance.now();
     };
+
+    const handleEnd = (x: number, y: number) => {
+      const dx = x - startX;
+      const dy = y - startY;
+      const dist = Math.hypot(dx, dy);
+      const dt = performance.now() - startTime;
+
+      // Downward Drag / Pull-Down Reload (Top-to-Bottom, dy > 30px):
+      // Force reload next creation immediately!
+      const isDownwardSwipe = dy > 30 && Math.abs(dy) > Math.abs(dx) * 1.1;
+      if (isDownwardSwipe) {
+        this.requestNewCreation(true);
+        return;
+      }
+
+      // Quick tap / click on hold stage:
+      if (dist < 12 && dt < 450) {
+        this.requestNewCreation(false);
+      }
+    };
+
+    // Pointer events (Desktop & Mobile)
+    window.addEventListener('pointerdown', (e) => handleStart(e.clientX, e.clientY));
+    window.addEventListener('pointerup', (e) => handleEnd(e.clientX, e.clientY));
+
+    // Touch events fallback (iOS / Android)
+    window.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) handleStart(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      if (e.changedTouches.length > 0) handleEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+    }, { passive: true });
+
+    // Wheel / Trackpad scroll down (PC / Mac)
+    let wheelTimer: number | null = null;
+    window.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > 30) {
+        if (wheelTimer !== null) return;
+        wheelTimer = window.setTimeout(() => { wheelTimer = null; }, 600);
+        this.requestNewCreation(true);
+      }
+    }, { passive: true });
 
     this.onKey = (event: KeyboardEvent) => {
       if (event.code === 'Space' && !event.repeat) {
         event.preventDefault();
-        this.requestNewCreation();
+        this.requestNewCreation(true);
       }
     };
-    domElement.addEventListener('pointerup', this.onClick as EventListener);
     window.addEventListener('keydown', this.onKey);
   }
 
@@ -308,8 +327,8 @@ export class ExperienceDirector {
 
   /** Click, Tap, or Swipe: dissolve creation and start a new one when creation is in hold state. */
   private requestNewCreation(force = false): void {
-    // Never interrupt or break an ongoing particle formation, preparation, or dissolve animation!
-    if (!force && (this.busy || this.act === 'prepare' || this.act === 'form' || this.act === 'dissolve')) return;
+    if (this.busy) return;
+    if (!force && (this.act === 'prepare' || this.act === 'form' || this.act === 'dissolve')) return;
     this.busy = true;
     const gen = this.gen;
     this.act = 'dissolve';
