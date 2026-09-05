@@ -226,9 +226,13 @@ export class ParticleField {
         this.buffers.position[ix + 2] = tz + sz;
       }
 
-      this.buffers.velocity[ix] = 0;
-      this.buffers.velocity[ix + 1] = 0;
-      this.buffers.velocity[ix + 2] = 0;
+      // Only zero velocities on the very first load (scatter=true)
+      // For continuous transitions (scatter=false) we preserve momentum
+      if (scatter) {
+        this.buffers.velocity[ix] = 0;
+        this.buffers.velocity[ix + 1] = 0;
+        this.buffers.velocity[ix + 2] = 0;
+      }
 
       this.buffers.color[ix] = color[ix];
       this.buffers.color[ix + 1] = color[ix + 1];
@@ -256,6 +260,76 @@ export class ParticleField {
     if (scatter) {
       this.snapToScattered();
     }
+  }
+
+  /**
+   * Continuous transition variant of applyDataset — used for loop iterations (gen > 1).
+   *
+   * Key differences from applyDataset():
+   * - Current particle POSITIONS are preserved (no teleport/snap)
+   * - Current particle VELOCITIES are preserved (momentum carries through from dissolve)
+   * - scatterOffset is zeroed so the spring target is exactly the new pixel target
+   * - cycleTime is reset with float phase collapsed to 0 so attraction starts immediately
+   *
+   * Result: particles spring smoothly from their current dissolved positions directly into
+   * the new image form — no visible break or restart between animation cycles.
+   */
+  applyDatasetContinuous(dataset: ParticleDataset): void {
+    this.dataset = dataset;
+    const n = Math.min(this.maxCount, dataset.header.count);
+    this.config.count = n;
+
+    const cellWorld = dataset.header.coverageScore > 0
+      ? dataset.header.coverageScore
+      : (1.0 / Math.sqrt(n));
+    (this.material.uniforms.uWorldPixel.value as number) = cellWorld;
+
+    const { target, color, size, importance, luminance, delays, seed } = dataset;
+
+    for (let i = 0; i < n; i++) {
+      const ix = i * 3;
+
+      // New pixel targets
+      this.buffers.target[ix]     = target[ix];
+      this.buffers.target[ix + 1] = target[ix + 1];
+      this.buffers.target[ix + 2] = target[ix + 2];
+
+      // Zero scatter offsets: scatterMix=0 → particle goes exactly to target
+      // This makes the spring pull particles from their CURRENT dissolved positions
+      // directly to the new image pixels, with no intermediate scatter snap
+      this.buffers.scatterOffset[ix]     = 0;
+      this.buffers.scatterOffset[ix + 1] = 0;
+      this.buffers.scatterOffset[ix + 2] = 0;
+
+      // ── PRESERVE current positions and velocities ──────────────────────────
+      // Do NOT touch this.buffers.position or this.buffers.velocity
+      // The spring physics will naturally pull them toward the new targets
+
+      // Morph colors toward new image
+      this.buffers.targetColor[ix]     = color[ix];
+      this.buffers.targetColor[ix + 1] = color[ix + 1];
+      this.buffers.targetColor[ix + 2] = color[ix + 2];
+      // Note: this.buffers.color is the current displayed color; it will lerp
+      // toward targetColor in update() — no hard color snap
+
+      this.buffers.size[i]       = size[i];
+      this.buffers.brightness[i] = 0.75 + luminance[i] * 0.35;
+      this.buffers.opacity[i]    = 1.0;
+      this.buffers.seed[i]       = seed[i];
+      this.buffers.importance[i] = importance[i];
+      this.buffers.delayOut[i]   = delays[i * 2];
+      this.buffers.delayIn[i]    = delays[i * 2 + 1];
+    }
+
+    this.geometry.setDrawRange(0, n);
+    this.markAllAttrs();
+
+    // Reset timeline — float phase will be 0 (set via setTimings before this call)
+    // so scatterMix immediately enters the attract computation from the start
+    this.cycleTime = 0;
+    this.lastPhase = 'float';
+    this.dissolveAmount = 0;
+    // No snapToScattered() — positions stay exactly where they are
   }
 
   replay(): void {

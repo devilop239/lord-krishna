@@ -94,6 +94,14 @@ export class DivineArtDirector {
       timings.attract += 0.5;
     }
 
+    // ── Mobile-specific timing compression ──────────────────────────────────
+    // Shorter hold & attract keeps the loop snappy on small screens
+    if (!isDesktop) {
+      timings.hold    = randRange(rng, 5.0, 7.0);   // was 6–9s on desktop
+      timings.attract = randRange(rng, 1.8, 2.5);   // was 2–3s on desktop
+      timings.dissolve = randRange(rng, 3.0, 4.2);  // slightly faster dissolve on mobile
+    }
+
     // ── Visual parameters ────────────────────────────────────────────────────
     const recipe: CreationRecipe = {
       seed,

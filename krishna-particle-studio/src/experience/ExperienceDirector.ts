@@ -136,10 +136,11 @@ export class ExperienceDirector {
     const glowScale = isMobile ? 0.5 : 1.0;
     const isFirstRun = gen === 1;
 
-    // For continuous loop transitions (gen > 1), spread particles immediately re-form into next image target
+    // For continuous loop transitions (gen > 1): skip float phase entirely so particles
+    // spring directly from their current dissolved positions to the new image targets
     if (!isFirstRun) {
-      recipe.timings.float = 0.1;
-      recipe.timings.attract = 2.0;
+      recipe.timings.float   = 0;                        // No scatter/float phase — jump straight to attract
+      recipe.timings.attract = isMobile ? 2.0 : 2.5;    // Faster re-form on mobile for snappiness
     }
 
     this.field.setSeeds(recipe.spawnSeed, recipe.targetSeed);
@@ -167,8 +168,14 @@ export class ExperienceDirector {
       colorMode:          'image',
     });
 
-    // Apply preprocessed binary dataset (morph seamlessly from current 3D positions if gen > 1)
-    this.field.applyDataset(dataset, isFirstRun, isMobile);
+    // Apply preprocessed binary dataset
+    // First run: scatter particles to spawn positions, then attract in
+    // Subsequent runs: continuous morph — preserve current positions/velocities for seamless loop
+    if (isFirstRun) {
+      this.field.applyDataset(dataset, true, isMobile);
+    } else {
+      this.field.applyDatasetContinuous(dataset);
+    }
     this.field.setRevealTarget(dataset.header.count);
     this.field.setPlaying(true);
 
@@ -295,7 +302,6 @@ export class ExperienceDirector {
     const isMobile = deviceTier() === 'mobile';
     const glowScale = isMobile ? 0.5 : 1.0;
 
-    this.artworkPlane.update(delta);
     this.artworkPlane.setOpacity(imageOpacity);
     this.artworkPlane.setGlow(artworkGlow * glowScale);
     this.artworkPlane.setUnveilProgress(unveilProgress);
