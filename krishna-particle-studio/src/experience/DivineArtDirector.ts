@@ -14,9 +14,10 @@ function pickAvoiding<T>(rng: () => number, items: T[], avoid?: T): T {
 }
 
 export interface DirectorMemory {
-  lastImageId?:  string;
-  lastSpawn?:    SpawnStyle;
-  lastDissolve?: DissolveStyle;
+  lastImageId?:   string;
+  lastSpawn?:     SpawnStyle;
+  lastDissolve?:  DissolveStyle;
+  shownImageIds?: string[];
 }
 
 export interface ComposeContext {
@@ -48,8 +49,16 @@ export class DivineArtDirector {
     const candidateImages = matchingImages.length > 0 ? matchingImages : ctx.images;
 
     const candidateIds = candidateImages.map((img) => img.id);
-    const imageId      = pickAvoiding(rng, candidateIds, ctx.memory.lastImageId);
-    const image        = candidateImages.find((img) => img.id === imageId) ?? candidateImages[0];
+    let history = ctx.memory.shownImageIds || [];
+    let pool = candidateIds.filter((id) => !history.includes(id));
+    if (pool.length === 0) {
+      pool = candidateIds;
+      history = [];
+    }
+    const imageId = pickAvoiding(rng, pool, ctx.memory.lastImageId);
+    history.push(imageId);
+    ctx.memory.shownImageIds = history;
+    const image = candidateImages.find((img) => img.id === imageId) ?? candidateImages[0];
 
     // ── Style pair: spawn + dissolve ──────────────────────────────────────────
     const spawnStyle    = pickAvoiding(rng, SPAWNS,    ctx.memory.lastSpawn);
@@ -72,12 +81,12 @@ export class DivineArtDirector {
 
     // ── Timing budgets ───────────────────────────────────────────────────────
     const timings = {
-      float:    randRange(rng, 2.5, 4.0),
-      attract:  randRange(rng, 2.5, 3.5),
-      form:     randRange(rng, 6.0, 9.0),
-      settle:   randRange(rng, 1.5, 2.5),
-      hold:     randRange(rng, 12.0, 18.0),
-      dissolve: randRange(rng, 4.0, 6.0),
+      float:    randRange(rng, 2.0, 3.5),
+      attract:  randRange(rng, 2.0, 3.0),
+      form:     randRange(rng, 5.5, 7.5),
+      settle:   randRange(rng, 1.5, 2.0),
+      hold:     randRange(rng, 6.0, 9.0),
+      dissolve: randRange(rng, 3.5, 5.0),
     };
 
     if (spawnStyle === 'emerge' || spawnStyle === 'spiral') {

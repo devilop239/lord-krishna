@@ -293,6 +293,15 @@ export class ExperienceDirector {
       // Gentle decay of lingering unhiding bloom wave into crystal-clear hold
       artworkGlow = Math.max(0.0, 1.0 - this.actTime / 1.6) * 0.45;
 
+      // Background pre-cache all remaining datasets during hold stage for 100% instant, unbroken transitions
+      if (this.actTime > 0.5 && this.cache.size < this.images.length) {
+        this.images.forEach((asset) => {
+          if (!this.cache.has(asset.id)) {
+            void this.loadDataset(asset);
+          }
+        });
+      }
+
       if (this.actTime >= recipe.timings.hold) {
         this.act = 'dissolve';
         this.actTime = 0;
