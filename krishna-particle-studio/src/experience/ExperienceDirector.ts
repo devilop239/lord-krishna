@@ -58,44 +58,12 @@ export class ExperienceDirector {
     engine.events.on('stats', (stats) => this.adaptQuality(stats.fps));
     engine.events.on('resize', () => this.fitArtwork());
 
-    let startX = 0;
-    let startY = 0;
-    let startTime = 0;
-
-    const handleStart = (x: number, y: number) => {
-      startX = x;
-      startY = y;
-      startTime = performance.now();
-    };
-
-    const handleEnd = (x: number, y: number) => {
-      const dx = x - startX;
-      const dy = y - startY;
-      const dist = Math.hypot(dx, dy);
-      const dt = performance.now() - startTime;
-
-      // Downward Drag / Pull-Down Reload (Top-to-Bottom, dy > 30px):
-      // Force reload next creation immediately!
-      const isDownwardSwipe = dy > 30 && Math.abs(dy) > Math.abs(dx) * 1.1;
-      if (isDownwardSwipe) {
+    // ── Keyboard shortcut to manually trigger next creation (desktop) ──────────
+    this.onKey = (event: KeyboardEvent) => {
+      if (event.code === 'Space' && !event.repeat) {
+        event.preventDefault();
         this.requestNewCreation(true);
-        return;
       }
-
-      // Quick tap / click on hold stage:
-      if (dist < 12 && dt < 450) {
-        this.requestNewCreation(false);
-      }
-    };
-
-    const onPointerDown = (e: PointerEvent) => handleStart(e.clientX, e.clientY);
-    const onPointerUp = (e: PointerEvent) => handleEnd(e.clientX, e.clientY);
-
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length > 0) handleStart(e.touches[0].clientX, e.touches[0].clientY);
-    };
-    const onTouchEnd = (e: TouchEvent) => {
-      if (e.changedTouches.length > 0) handleEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
     };
 
     let wheelTimer: number | null = null;
@@ -107,25 +75,10 @@ export class ExperienceDirector {
       }
     };
 
-    this.onKey = (event: KeyboardEvent) => {
-      if (event.code === 'Space' && !event.repeat) {
-        event.preventDefault();
-        this.requestNewCreation(true);
-      }
-    };
-
-    window.addEventListener('pointerdown', onPointerDown);
-    window.addEventListener('pointerup', onPointerUp);
-    window.addEventListener('touchstart', onTouchStart, { passive: true });
-    window.addEventListener('touchend', onTouchEnd, { passive: true });
     window.addEventListener('wheel', onWheel, { passive: true });
     window.addEventListener('keydown', this.onKey);
 
     this.cleanupListeners = () => {
-      window.removeEventListener('pointerdown', onPointerDown);
-      window.removeEventListener('pointerup', onPointerUp);
-      window.removeEventListener('touchstart', onTouchStart);
-      window.removeEventListener('touchend', onTouchEnd);
       window.removeEventListener('wheel', onWheel);
       window.removeEventListener('keydown', this.onKey);
     };
@@ -181,6 +134,13 @@ export class ExperienceDirector {
 
     const isMobile = deviceTier() === 'mobile';
     const glowScale = isMobile ? 0.5 : 1.0;
+    const isFirstRun = gen === 1;
+
+    // For continuous loop transitions (gen > 1), spread particles immediately re-form into next image target
+    if (!isFirstRun) {
+      recipe.timings.float = 0.1;
+      recipe.timings.attract = 2.0;
+    }
 
     this.field.setSeeds(recipe.spawnSeed, recipe.targetSeed);
     this.field.setSpawnStyle(recipe.spawnStyle);
@@ -207,8 +167,8 @@ export class ExperienceDirector {
       colorMode:          'image',
     });
 
-    // Apply preprocessed binary dataset with device-aware scatter bounds
-    this.field.applyDataset(dataset, true, isMobile);
+    // Apply preprocessed binary dataset (morph seamlessly from current 3D positions if gen > 1)
+    this.field.applyDataset(dataset, isFirstRun, isMobile);
     this.field.setRevealTarget(dataset.header.count);
     this.field.setPlaying(true);
 
@@ -260,7 +220,7 @@ export class ExperienceDirector {
 
     if (this.act === 'form') {
       const progress = Math.min(1.0, Math.max(0.0, tCurrent / Math.max(0.1, tDuration)));
-      
+
       // STAGE 1: Particles fly in & assemble (Photo HIDDEN 0.0, Particles VISIBLE 1.0)
       if (progress < 0.75) {
         imageOpacity = 0.0;

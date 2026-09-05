@@ -45,12 +45,49 @@ async function bootstrap(): Promise<void> {
   const director = new ExperienceDirector(engine, field, composer);
   await director.start();
 
+  // Mount the glassmorphic fullscreen button
+  mountFullscreenButton();
+
   window.addEventListener('beforeunload', () => {
     director.dispose();
     composer.dispose();
     field.dispose();
     engine.dispose();
   });
+}
+
+/**
+ * Wires up the fullscreen toggle button.
+ * - Click → enter / exit fullscreen
+ * - Esc key → browser handles exit natively; we sync the icon via fullscreenchange
+ * - If Fullscreen API unavailable, hide the button gracefully.
+ */
+function mountFullscreenButton(): void {
+  const btn = document.getElementById('btn-fullscreen') as HTMLButtonElement | null;
+  if (!btn) return;
+
+  // Hide if the Fullscreen API is not supported (some iOS Safari versions)
+  if (!document.documentElement.requestFullscreen) {
+    btn.style.display = 'none';
+    return;
+  }
+
+  const syncIcon = () => {
+    const isFull = !!document.fullscreenElement;
+    btn.classList.toggle('is-fullscreen', isFull);
+    btn.setAttribute('aria-label', isFull ? 'Exit fullscreen' : 'Enter fullscreen');
+  };
+
+  btn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      void document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+    } else {
+      void document.exitFullscreen();
+    }
+  });
+
+  // Sync icon whenever fullscreen state changes (covers Esc key too)
+  document.addEventListener('fullscreenchange', syncIcon);
 }
 
 void bootstrap();

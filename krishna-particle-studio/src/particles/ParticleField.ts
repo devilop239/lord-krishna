@@ -224,10 +224,6 @@ export class ParticleField {
         this.buffers.position[ix] = tx + sx;
         this.buffers.position[ix + 1] = ty + sy;
         this.buffers.position[ix + 2] = tz + sz;
-      } else {
-        this.buffers.position[ix] = tx;
-        this.buffers.position[ix + 1] = ty;
-        this.buffers.position[ix + 2] = tz;
       }
 
       this.buffers.velocity[ix] = 0;
@@ -397,6 +393,14 @@ export class ParticleField {
       const gy = target[ix + 1] + scatterOffset[ix + 1] * scatterMix + drift.y + dissolveY;
       const gz = target[ix + 2] + scatterOffset[ix + 2] * scatterMix + dissolveZ;
 
+      // Smooth color morphing as particles fly towards the new image target
+      const targetC = this.buffers.targetColor;
+      const c = this.buffers.color;
+      const cLerp = Math.min(1.0, dt * 2.5);
+      c[ix] += (targetC[ix] - c[ix]) * cLerp;
+      c[ix + 1] += (targetC[ix + 1] - c[ix + 1]) * cLerp;
+      c[ix + 2] += (targetC[ix + 2] - c[ix + 2]) * cLerp;
+
       // Physics spring simulation
       velocity[ix] += (gx - position[ix]) * spring * dt;
       velocity[ix + 1] += (gy - position[ix + 1]) * spring * dt;
@@ -413,6 +417,7 @@ export class ParticleField {
     }
 
     (this.geometry.attributes.position as THREE.BufferAttribute).needsUpdate = true;
+    (this.geometry.attributes.aColor as THREE.BufferAttribute).needsUpdate = true;
   }
 
   private computeScatterMix(
