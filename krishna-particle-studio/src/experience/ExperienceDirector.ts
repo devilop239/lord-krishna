@@ -41,6 +41,7 @@ export class ExperienceDirector {
   private busy = false;
   private fpsEma = 60;
   private holdFpsLow = 0;
+  private isPrecaching = false;
   private removeTick: () => void;
   private onKey: (e: KeyboardEvent) => void;
   private cleanupListeners: () => void;

@@ -7,8 +7,11 @@
 export class AudioController {
   private audio: HTMLAudioElement;
   private isPlaying = false;
+  private targetVolume = 0.50;
+  private isMinimized = false;
   private isSeeking = false;
   private onNextCreationCallback: (() => void) | null = null;
+  private cleanupListeners: (() => void) | null = null;
 
   // UI elements
   private playBtn: HTMLButtonElement | null = null;
