@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 export const logoIntroVertShader = /* glsl */ `
   varying vec2 vUv;
   void main() {

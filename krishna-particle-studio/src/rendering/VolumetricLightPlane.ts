@@ -106,7 +106,7 @@ export class VolumetricLightPlane {
     this.material.uniforms.uGoldRatio.value = Math.max(0, Math.min(1, ratio));
   }
 
-  update(delta: number, elapsed: number): void {
+  update(_delta: number, elapsed: number): void {
     this.material.uniforms.uTime.value = elapsed;
   }
 
