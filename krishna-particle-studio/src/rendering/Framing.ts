@@ -44,3 +44,39 @@ export function computeFraming(
     frustumHeight,
   };
 }
+
+/**
+ * Framing math specifically tailored for logo brand presentation.
+ * Scales logo artwork to ~55-60% of viewport frustum so it sits with luxury padding
+ * and never feels oversized or stretched.
+ */
+export function computeLogoFraming(
+  sourceAspect: number,
+  viewportWidth: number,
+  viewportHeight: number,
+  cameraFovDeg: number = 50,
+  cameraZ: number = 40.0
+): FramingResult {
+  const fovRad = (cameraFovDeg * Math.PI) / 180;
+  const frustumHeight = 2.0 * cameraZ * Math.tan(fovRad / 2.0);
+  const viewportAspect = viewportWidth / Math.max(1, viewportHeight);
+  const frustumWidth = frustumHeight * viewportAspect;
+
+  const isPortraitMobile = viewportAspect < 0.95;
+
+  // Desktop/Landscape: 85% width / 74% height; Mobile Portrait: 94% width / 58% height
+  const maxW = frustumWidth * (isPortraitMobile ? 0.94 : 0.85);
+  const maxH = frustumHeight * (isPortraitMobile ? 0.58 : 0.74);
+
+  const targetHeight = Math.min(maxW / sourceAspect, maxH);
+  const targetWidth = targetHeight * sourceAspect;
+  const scale = targetHeight;
+
+  return {
+    worldWidth: targetWidth,
+    worldHeight: targetHeight,
+    scale,
+    frustumWidth,
+    frustumHeight,
+  };
+}

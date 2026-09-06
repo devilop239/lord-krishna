@@ -3,12 +3,11 @@ import { Engine } from './core/Engine';
 import { SceneComposer } from './rendering/SceneComposer';
 import { ParticleField } from './particles/ParticleField';
 import { ExperienceDirector } from './experience/ExperienceDirector';
+import { AudioController } from './audio/AudioController';
 
 /**
- * Phase 3 bootstrap — minimal cinematic experience.
- * No visible controls, no UI panels, no image selector.
- * The ExperienceDirector owns everything: image selection,
- * randomized recipe, particle formation, continuous cycling.
+ * Main application bootstrap.
+ * Boots with sleek preloader screen, then launches directly into the core particle experience.
  */
 async function bootstrap(): Promise<void> {
   const canvas = document.getElementById('scene-canvas') as HTMLCanvasElement | null;
@@ -21,14 +20,11 @@ async function bootstrap(): Promise<void> {
   engine.camera.position.set(0, 0, 40);
 
   const composer = new SceneComposer(engine);
-  // 4K QUALITY: Increase max particle buffer for high-density rendering
   const field = new ParticleField({}, 200_000);
   engine.scene.add(field.points);
 
-  // Register particle field update into the engine loop
   engine.addUpdatable((delta, elapsed) => field.update(delta, elapsed));
 
-  // Sync canvas height for correct particle sizing
   field.setCanvasHeight(canvas.parentElement?.clientHeight ?? window.innerHeight);
   engine.events.on('resize', ({ height }) => {
     field.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
@@ -42,13 +38,31 @@ async function bootstrap(): Promise<void> {
 
   engine.start();
 
+  const loadStart = performance.now();
+
+  // Initialize and start official Krishna particle experience directly
   const director = new ExperienceDirector(engine, field, composer);
+
+  // Initialize divine background flute theme & music bar controls
+  const audioController = new AudioController('/assets/Krishna ji_flute.mp3', () => {
+    director.requestNewCreation(true);
+  });
+
   await director.start();
 
-  // Mount the glassmorphic fullscreen button
+  // Guarantee loading screen displays for at least 3.0 seconds (3000ms)
+  const elapsedMs = performance.now() - loadStart;
+  const minHoldMs = 3000;
+  const remainingMs = Math.max(0, minHoldMs - elapsedMs);
+
+  setTimeout(() => {
+    hidePreloader();
+  }, remainingMs);
+
   mountFullscreenButton();
 
   window.addEventListener('beforeunload', () => {
+    audioController.dispose();
     director.dispose();
     composer.dispose();
     field.dispose();
@@ -57,37 +71,88 @@ async function bootstrap(): Promise<void> {
 }
 
 /**
- * Wires up the fullscreen toggle button.
- * - Click → enter / exit fullscreen
- * - Esc key → browser handles exit natively; we sync the icon via fullscreenchange
- * - If Fullscreen API unavailable, hide the button gracefully.
+ * Fades out and removes the preloader overlay.
+ */
+function hidePreloader(): void {
+  const preloader = document.getElementById('preloader');
+  if (!preloader) return;
+  preloader.classList.add('is-hidden');
+  setTimeout(() => {
+    if (preloader.parentNode) {
+      preloader.parentNode.removeChild(preloader);
+    }
+  }, 900);
+}
+
+/**
+ * Wires up the fullscreen toggle button with cross-browser API support.
  */
 function mountFullscreenButton(): void {
   const btn = document.getElementById('btn-fullscreen') as HTMLButtonElement | null;
   if (!btn) return;
 
-  // Hide if the Fullscreen API is not supported (some iOS Safari versions)
-  if (!document.documentElement.requestFullscreen) {
-    btn.style.display = 'none';
-    return;
-  }
+  const doc = document as any;
+  const docEl = document.documentElement as any;
 
-  const syncIcon = () => {
-    const isFull = !!document.fullscreenElement;
-    btn.classList.toggle('is-fullscreen', isFull);
-    btn.setAttribute('aria-label', isFull ? 'Exit fullscreen' : 'Enter fullscreen');
+  const getFSElement = (): Element | null => {
+    return (
+      doc.fullscreenElement ||
+      doc.webkitFullscreenElement ||
+      doc.mozFullScreenElement ||
+      doc.msFullscreenElement ||
+      null
+    );
   };
 
-  btn.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      void document.documentElement.requestFullscreen({ navigationUI: 'hide' });
-    } else {
-      void document.exitFullscreen();
+  const syncIcon = () => {
+    const isFull = !!getFSElement();
+    btn.classList.toggle('is-fullscreen', isFull);
+    btn.setAttribute('aria-label', isFull ? 'Exit fullscreen' : 'Enter fullscreen');
+    btn.setAttribute('title', isFull ? 'Exit Fullscreen (Esc)' : 'Fullscreen (Esc to exit)');
+  };
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    const requestFS =
+      docEl.requestFullscreen ||
+      docEl.webkitRequestFullscreen ||
+      docEl.mozRequestFullScreen ||
+      docEl.msRequestFullscreen;
+
+    const exitFS =
+      doc.exitFullscreen ||
+      doc.webkitExitFullscreen ||
+      doc.mozCancelFullScreen ||
+      doc.msExitFullscreen;
+
+    try {
+      if (!getFSElement()) {
+        if (requestFS) {
+          const promise = requestFS.call(docEl, { navigationUI: 'hide' });
+          if (promise && typeof promise.catch === 'function') {
+            promise.catch(() => {
+              // Retry standard request without options
+              requestFS.call(docEl);
+            });
+          }
+        }
+      } else {
+        if (exitFS) {
+          exitFS.call(doc);
+        }
+      }
+    } catch (err) {
+      console.warn('Fullscreen toggle encountered an issue:', err);
     }
   });
 
-  // Sync icon whenever fullscreen state changes (covers Esc key too)
-  document.addEventListener('fullscreenchange', syncIcon);
+  const fsEvents = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
+  fsEvents.forEach((evt) => {
+    document.addEventListener(evt, syncIcon);
+  });
+
+  syncIcon();
 }
 
 void bootstrap();

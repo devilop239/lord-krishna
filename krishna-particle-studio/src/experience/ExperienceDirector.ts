@@ -315,7 +315,7 @@ export class ExperienceDirector {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /** Click, Tap, or Swipe: dissolve creation and start a new one when creation is in hold state. */
-  private requestNewCreation(force = false): void {
+  public requestNewCreation(force = false): void {
     if (this.busy) return;
     if (!force && (this.act === 'prepare' || this.act === 'form' || this.act === 'dissolve')) return;
     this.busy = true;
@@ -362,6 +362,10 @@ export class ExperienceDirector {
       this.field.setConfig({ count: reduced });
       this.field.setRevealTarget(reduced);
     }
+  }
+
+  setVisible(visible: boolean): void {
+    this.artworkPlane.mesh.visible = visible;
   }
 
   private fitArtwork(): void {

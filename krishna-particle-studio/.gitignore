@@ -32,7 +32,7 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 
-# Cache
+# Cache & Temporary Markers
 .cache
 .parcel-cache
 .next
@@ -42,6 +42,8 @@ lerna-debug.log*
 .fusebox
 .dynamodb
 .tern-port
+.*.upright
+.tempmediaStorage
 
 # Testing
 coverage

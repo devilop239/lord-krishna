@@ -58,5 +58,5 @@ export function ensureGeneratedDatasets(rootDir) {
   // Ensure all PC JPG source images are saved in true landscape orientation
   fixPcImageOrientations(rootDir);
 
-  runPreprocessing(rootDir);
+  runPreprocessing(rootDir, undefined, false);
 }
