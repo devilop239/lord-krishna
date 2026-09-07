@@ -23,6 +23,7 @@ varying float vOpacity;
 varying float vLum;
 varying float vImportance;
 varying float vProximityGlow;
+varying float vDepth;
 
 void main() {
   vColor = aColor;
@@ -52,6 +53,9 @@ void main() {
 
   vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
   float z = max(-mvPosition.z, 0.15);
+  
+  // Normalized view depth factor (0 near camera, 1 further away)
+  vDepth = clamp((z - 10.0) / 60.0, 0.0, 1.0);
   
   // Exact screen-space cell size calculation for seamless solid image reconstruction
   float worldToPixels = uCanvasH / (2.0 * uTanHalfFov * z);

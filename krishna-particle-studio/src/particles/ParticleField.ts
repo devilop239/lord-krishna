@@ -422,14 +422,28 @@ export class ParticleField {
         scatterMix = this.computeScatterMix(time, dOut, dIn, tAttract, tForm);
       }
 
-      // Drift and turbulence - active from the very 1st second on site load/reload
+      // 3D Drift and turbulence - active from the very 1st second on site load/reload
       const driftActive = time < tForm + 1.5 || dissolve > 0.05;
       const floatBase = 0.18; // Instant fluid movement on page load/reload
       const driftAmp = driftActive ? (floatBase + turb * scatterMix * 0.40) : 0;
       const drift = {
         x: Math.sin(elapsed * 0.72 + s * 9.1) * driftAmp,
         y: Math.cos(elapsed * 0.58 + s * 5.2) * driftAmp * 0.85,
+        z: Math.sin(elapsed * 0.65 + s * 11.3) * driftAmp * 1.6,
       };
+
+      // Systematic 3D Orbital Vortex Ribbons during float and attraction
+      let orbitX = 0;
+      let orbitY = 0;
+      let orbitZ = 0;
+
+      if (scatterMix > 0.02) {
+        const orbitAngle = elapsed * 0.45 + (s * 6.2831);
+        const orbitRadius = scatterMix * (1.2 + Math.sin(s * 17.1) * 0.4);
+        orbitX = Math.cos(orbitAngle) * orbitRadius;
+        orbitY = Math.sin(orbitAngle * 0.85) * orbitRadius * 0.7;
+        orbitZ = Math.sin(orbitAngle * 1.3) * orbitRadius * 1.5;
+      }
 
       // Dissolve vector logic
       let dissolveX = 0;
@@ -462,10 +476,10 @@ export class ParticleField {
         }
       }
 
-      // Target positions
-      const gx = target[ix] + scatterOffset[ix] * scatterMix + drift.x + dissolveX;
-      const gy = target[ix + 1] + scatterOffset[ix + 1] * scatterMix + drift.y + dissolveY;
-      const gz = target[ix + 2] + scatterOffset[ix + 2] * scatterMix + dissolveZ;
+      // Target positions (3D spatial assembly)
+      const gx = target[ix] + scatterOffset[ix] * scatterMix + drift.x + orbitX + dissolveX;
+      const gy = target[ix + 1] + scatterOffset[ix + 1] * scatterMix + drift.y + orbitY + dissolveY;
+      const gz = target[ix + 2] + scatterOffset[ix + 2] * scatterMix + drift.z + orbitZ + dissolveZ;
 
       // Smooth color morphing as particles fly towards the new image target
       const targetC = this.buffers.targetColor;

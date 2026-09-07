@@ -15,174 +15,12 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400&display=swap"
     rel="stylesheet" />
-
-  <!-- Critical Ultra-Aesthetic Preloader Styles -->
-  <style>
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #030508;
-      color: #eceafc;
-      overflow: hidden;
-    }
-
-    .preloader {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #030508;
-      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.85s ease;
-    }
-
-    .preloader.is-hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .preloader-aura {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(154, 134, 255, 0.16) 0%, rgba(229, 184, 105, 0.08) 40%, transparent 70%);
-      animation: auraPulse 4s ease-in-out infinite alternate;
-      pointer-events: none;
-    }
-
-    .preloader-card {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      padding: 36px 44px;
-      border-radius: 24px;
-      background: rgba(10, 16, 32, 0.65);
-      border: 1px solid rgba(229, 184, 105, 0.25);
-      box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.8),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      text-align: center;
-      max-width: 88vw;
-    }
-
-    .preloader-crest {
-      width: 64px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: crestFloat 3s ease-in-out infinite alternate;
-    }
-
-    .crest-svg {
-      width: 64px !important;
-      height: 64px !important;
-      filter: drop-shadow(0 0 16px rgba(229, 184, 105, 0.65));
-    }
-
-    .preloader-title {
-      font-family: 'Fraunces', serif, sans-serif;
-      font-size: 1.35rem;
-      font-weight: 500;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      background: linear-gradient(135deg, #ffffff 0%, #e5b869 60%, #9a86ff 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(229, 184, 105, 0.3);
-    }
-
-    .preloader-shimmer-bar {
-      position: relative;
-      width: 140px;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .shimmer-fill {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 50%;
-      background: linear-gradient(90deg, transparent 0%, #e5b869 50%, #ffffff 75%, transparent 100%);
-      animation: shimmerTravel 1.6s ease-in-out infinite;
-    }
-
-    .preloader-subtitle {
-      font-family: 'Fraunces', serif, sans-serif;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(236, 234, 252, 0.5);
-    }
-
-    @keyframes auraPulse {
-      from {
-        transform: scale(0.85);
-        opacity: 0.6;
-      }
-
-      to {
-        transform: scale(1.15);
-        opacity: 1.0;
-      }
-    }
-
-    @keyframes crestFloat {
-      from {
-        transform: translateY(0);
-      }
-
-      to {
-        transform: translateY(-6px);
-      }
-    }
-
-    @keyframes shimmerTravel {
-      0% {
-        left: -50%;
-      }
-
-      100% {
-        left: 100%;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .preloader-card {
-        padding: 28px 32px;
-        gap: 14px;
-      }
-
-      .preloader-title {
-        font-size: 1.15rem;
-        letter-spacing: 0.18em;
-      }
-
-      .preloader-subtitle {
-        font-size: 0.68rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/src/style.css" />
 </head>
 
 <body>
   <div id="app">
-    <!-- Sleek Glassmorphic Spiritual Preloader -->
+    <!-- Preloader -->
     <div id="preloader" class="preloader" aria-label="Loading experience">
       <div class="preloader-aura"></div>
       <div class="preloader-card">
@@ -219,134 +57,148 @@
     <canvas id="scene-canvas"></canvas>
     <div class="vignette" aria-hidden="true"></div>
 
-    <!-- Floating Navigation & Music Player Container -->
-    <div class="music-player-container">
-      <!-- Ultra-Sleek Glassmorphic Floating Music Player Bar -->
-      <div id="music-player-bar" class="music-player-bar is-playing">
-        <div class="music-bar-container">
-          
-          <!-- Left: Album Art & Track Meta -->
-          <div class="music-meta">
-            <div class="music-art-wrapper">
-              <svg class="music-art-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 6C20 18 16 32 24 44C28 50 32 58 32 58C32 58 36 50 40 44C48 32 44 18 32 6Z" stroke="url(#mArtGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                <ellipse cx="32" cy="24" rx="5" ry="7" fill="url(#mBlueGoldGrad)"/>
-                <circle cx="32" cy="24" r="2.5" fill="#1e3a8a"/>
-                <defs>
-                  <linearGradient id="mArtGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#ffffff"/>
-                    <stop offset="50%" stop-color="#e5b869"/>
-                    <stop offset="100%" stop-color="#9a86ff"/>
-                  </linearGradient>
-                  <linearGradient id="mBlueGoldGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#e5b869"/>
-                    <stop offset="100%" stop-color="#3b82f6"/>
-                  </linearGradient>
-                </defs>
+    <!-- Player dock: glass music bar + fullscreen button -->
+    <div class="player-dock" id="player-dock">
+
+      <!-- Minimized-state restore chip -->
+      <div class="mini-restore" id="mini-restore">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+        <span id="mini-restore-title">Krishna Ji Flute Theme</span>
+      </div>
+
+      <div id="music-player-bar" class="player-bar is-playing">
+
+        <!-- Left: artwork + track meta -->
+        <div class="p-meta">
+          <div class="p-art">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M32 6C20 18 16 32 24 44C28 50 32 58 32 58C32 58 36 50 40 44C48 32 44 18 32 6Z"
+                stroke="url(#mArtGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+              <ellipse cx="32" cy="24" rx="5" ry="7" fill="url(#mBlueGoldGrad)" />
+              <circle cx="32" cy="24" r="2.5" fill="#1e3a8a" />
+              <defs>
+                <linearGradient id="mArtGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="50%" stop-color="#e5b869" />
+                  <stop offset="100%" stop-color="#9a86ff" />
+                </linearGradient>
+                <linearGradient id="mBlueGoldGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#e5b869" />
+                  <stop offset="100%" stop-color="#3b82f6" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="p-eq" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+          <div class="p-text">
+            <div class="p-title" id="music-title">Krishna Ji Flute Theme</div>
+            <div class="p-sub" id="music-artist">Mahabharat 2013 · Divine Melody</div>
+          </div>
+        </div>
+
+        <!-- Center: transport + waveform scrubber -->
+        <div class="p-center">
+          <div class="p-buttons">
+            <button id="btn-prev-creation" class="p-btn" title="Previous Creation" aria-label="Previous creation">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polygon points="19 20 9 12 19 4 19 20"></polygon>
+                <line x1="5" y1="19" x2="5" y2="5"></line>
               </svg>
-              <div class="music-mini-eq" aria-hidden="true">
-                <span class="m-bar m-bar--1"></span>
-                <span class="m-bar m-bar--2"></span>
-                <span class="m-bar m-bar--3"></span>
-              </div>
-            </div>
-            <div class="music-text">
-              <div class="music-title">Krishna Ji Flute Theme</div>
-              <div class="music-artist">Mahabharat 2013 • Divine Melody</div>
-            </div>
-          </div>
+            </button>
 
-          <!-- Center: Controls & Wave Scrubber -->
-          <div class="music-center-controls">
-            <div class="music-buttons">
-              <button id="btn-prev-creation" class="music-btn" title="Previous Creation (Space)" aria-label="Previous creation">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="19 20 9 12 19 4 19 20"></polygon>
-                  <line x1="5" y1="19" x2="5" y2="5"></line>
-                </svg>
-              </button>
+            <button id="btn-play-pause" class="p-btn p-play" title="Play / Pause" aria-label="Play or pause music">
+              <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="6 4 20 12 6 20 6 4"></polygon>
+              </svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16" rx="1.5"></rect>
+                <rect x="14" y="4" width="4" height="16" rx="1.5"></rect>
+              </svg>
+            </button>
 
-              <button id="btn-play-pause" class="music-btn music-btn-play" title="Play / Pause" aria-label="Play or pause music">
-                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor">
-                  <polygon points="6 4 20 12 6 20 6 4"></polygon>
-                </svg>
-                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="6" y="4" width="4" height="16" rx="1.5"></rect>
-                  <rect x="14" y="4" width="4" height="16" rx="1.5"></rect>
-                </svg>
-              </button>
-
-              <button id="btn-next-creation" class="music-btn" title="Next Creation (Space)" aria-label="Next creation">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="5 4 15 12 5 20 5 4"></polygon>
-                  <line x1="19" y1="5" x2="19" y2="19"></line>
-                </svg>
-              </button>
-            </div>
-
-            <div class="music-scrubber-row">
-              <span id="music-time-curr" class="music-time">0:00</span>
-              <div class="music-track-container">
-                <div class="music-wave-pillars" aria-hidden="true">
-                  <span class="wp wp-1"></span><span class="wp wp-2"></span><span class="wp wp-3"></span>
-                  <span class="wp wp-4"></span><span class="wp wp-5"></span><span class="wp wp-6"></span>
-                  <span class="wp wp-7"></span><span class="wp wp-8"></span><span class="wp wp-9"></span>
-                  <span class="wp wp-10"></span><span class="wp wp-11"></span><span class="wp wp-12"></span>
-                </div>
-                <input id="music-progress" type="range" min="0" max="100" value="0" step="0.1" aria-label="Seek audio position" />
-                <div id="music-progress-fill" class="music-progress-fill"></div>
-              </div>
-              <span id="music-time-dur" class="music-time">4:54</span>
-            </div>
-          </div>
-
-          <!-- Right: Volume Slider, Minimize & Fullscreen -->
-          <div class="music-right-controls">
-            <div class="music-volume-group">
-              <button id="btn-volume-mute" class="music-btn music-btn-vol" title="Mute / Unmute" aria-label="Mute or Unmute">
-                <svg class="vol-icon-high" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                </svg>
-                <svg class="vol-icon-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                  <line x1="22" y1="9" x2="16" y2="15"></line>
-                  <line x1="16" y1="9" x2="22" y2="15"></line>
-                </svg>
-              </button>
-              <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.50" class="vol-slider" aria-label="Adjust volume" />
-            </div>
-
-            <button id="btn-toggle-mini" class="music-btn music-btn-mini" title="Minimize / Expand Player" aria-label="Minimize or Expand Player">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="18 15 12 9 6 15"></polyline>
+            <button id="btn-next-creation" class="p-btn" title="Next Creation" aria-label="Next creation">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                <line x1="19" y1="5" x2="19" y2="19"></line>
               </svg>
             </button>
           </div>
 
+          <div class="p-scrub">
+            <span id="music-time-curr" class="p-time">0:00</span>
+            <div class="p-track">
+              <div class="p-wave" id="music-wave" aria-hidden="true"></div>
+              <input id="music-progress" class="p-range" type="range" min="0" max="100" value="0" step="0.1"
+                aria-label="Seek audio position" />
+            </div>
+            <span id="music-time-dur" class="p-time">4:54</span>
+          </div>
+        </div>
+
+        <!-- Right: volume popover, minimize -->
+        <div class="p-right">
+          <div class="p-vol-wrap" id="music-vol-wrap">
+            <button id="btn-volume-mute" class="p-btn" title="Volume" aria-label="Mute or unmute">
+              <svg id="music-vol-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path id="music-vol-wave" d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+                <g id="music-vol-muted-lines" style="display:none">
+                  <line x1="22" y1="9" x2="16" y2="15"></line>
+                  <line x1="16" y1="9" x2="22" y2="15"></line>
+                </g>
+              </svg>
+            </button>
+            <div class="p-vol-pop">
+              <div class="p-vol-fill-track">
+                <div class="p-vol-fill" id="music-vol-fill"></div>
+                <input id="music-volume" class="p-vol-range" type="range" min="0" max="1" step="0.01" value="0.50"
+                  aria-label="Adjust volume" />
+              </div>
+              <span class="p-vol-num" id="music-vol-num">50%</span>
+            </div>
+          </div>
+
+          <button id="btn-toggle-mini" class="p-btn p-mini" title="Minimize Player" aria-label="Minimize player">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <polyline points="18 15 12 9 6 15"></polyline>
+            </svg>
+          </button>
         </div>
       </div>
 
-      <!-- Standalone Glass Fullscreen Button -->
+      <!-- Standalone fullscreen button -->
       <button id="btn-fullscreen" class="fs-btn" aria-label="Toggle fullscreen" title="Fullscreen (Esc to exit)">
-        <!-- Enter fullscreen icon -->
         <svg class="fs-icon fs-icon--enter" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M3 9V4.5A1.5 1.5 0 0 1 4.5 3H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M15 3h4.5A1.5 1.5 0 0 1 21 4.5V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M21 15v4.5A1.5 1.5 0 0 1 19.5 21H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M9 21H4.5A1.5 1.5 0 0 1 3 19.5V15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M3 9V4.5A1.5 1.5 0 0 1 4.5 3H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M15 3h4.5A1.5 1.5 0 0 1 21 4.5V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M21 15v4.5A1.5 1.5 0 0 1 19.5 21H15" stroke="currentColor" stroke-width="1.8"
+            stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M9 21H4.5A1.5 1.5 0 0 1 3 19.5V15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
-        <!-- Exit fullscreen icon -->
         <svg class="fs-icon fs-icon--exit" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M9 3v5.5A.5.5 0 0 1 8.5 9H3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M21 9h-5.5A.5.5 0 0 1 15 8.5V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M15 21v-5.5a.5.5 0 0 1 .5-.5H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M3 15h5.5a.5.5 0 0 1 .5.5V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M9 3v5.5A.5.5 0 0 1 8.5 9H3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M21 9h-5.5A.5.5 0 0 1 15 8.5V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M15 21v-5.5a.5.5 0 0 1 .5-.5H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M3 15h5.5a.5.5 0 0 1 .5.5V21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
-        <span class="fs-ripple"></span>
       </button>
     </div>
   </div>
+
   <audio id="bg-audio" src="/assets/Krishna ji_flute.mp3" loop autoplay playsinline preload="auto"></audio>
   <script type="module" src="/src/main.ts"></script>
 </body>

@@ -43,8 +43,8 @@ async function bootstrap(): Promise<void> {
   // Initialize and start official Krishna particle experience directly
   const director = new ExperienceDirector(engine, field, composer);
 
-  // Initialize divine background flute theme & music bar controls
-  const audioController = new AudioController('/assets/Krishna ji_flute.mp3', () => {
+  // Initialize divine background Radhe Radhe theme & music bar controls
+  const audioController = new AudioController('/assets/Radhee Radhee.m4a', () => {
     director.requestNewCreation(true);
   });
 
